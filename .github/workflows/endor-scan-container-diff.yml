@@ -111,12 +111,20 @@ jobs:
         id: endor-diff
         run: |
           set +e
-          endorctl container scan --image="$IMAGE" --project-name=app-java-demo --namespace=farhan-demo --as-ref --diff --suppress-baseline-findings
-          status=$?
+          endorctl container scan --image="$IMAGE" --project-name=app-java-demo   --namespace=farhan-demo --as-ref --diff --suppress-baseline-findings -o json | tee "$GITHUB_WORKSPACE/endor-container-diff.json"
+          status=${PIPESTATUS[0]}
           set -e
           echo "endorctl exited with $status"
           echo "exit_code=$status" >> "$GITHUB_OUTPUT"
           exit "$status"
+
+      - name: Save Endor scan output
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: endor-container-diff
+          path: endor-container-diff.json
+          retention-days: 7
 
       # Deploy: Step 5
       - name: Get image digest
