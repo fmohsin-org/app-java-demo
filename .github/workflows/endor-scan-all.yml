@@ -101,7 +101,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     env:
-      IMAGE: fmohsin-org/endor-java-webapp-demo:latest
+      IMAGE: ${{ secrets.DOCKER_USERNAME }}/endor-java-webapp-demo:latest
     steps:
       # Deploy: Step 1
       - name: Checkout repository
