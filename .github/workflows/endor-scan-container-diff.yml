@@ -108,8 +108,15 @@ jobs:
           namespace: farhan-demo
 
       - name: Endor container diff scan
+        id: endor-diff
         run: |
-          endorctl container scan  --image="$IMAGE" --project-name=app-java-demo --namespace=farhan-demo --as-ref --diff --suppress-baseline-findings
+          set +e
+          endorctl container scan --image="$IMAGE" --project-name=app-java-demo --namespace=farhan-demo --as-ref --diff --suppress-baseline-findings
+          status=$?
+          set -e
+          echo "endorctl exited with $status"
+          echo "exit_code=$status" >> "$GITHUB_OUTPUT"
+          exit "$status"
 
       # Deploy: Step 5
       - name: Get image digest
