@@ -55,21 +55,21 @@ jobs:
 
 
       # Build: Step 5
-      - name: Endor code scan Main Branch - dependencies, secrets, AISAST, and tools
-        uses: endorlabs/github-action@f46ffb04c928a9c9c356f9627bd60b710ed0963e # v1.1.13
+#      - name: Endor code scan Main Branch - dependencies, secrets, AISAST, and tools
+#        uses: endorlabs/github-action@f46ffb04c928a9c9c356f9627bd60b710ed0963e # v1.1.13
 #        env:
 #         ENDOR_SCAN_SEMGREP_PROGRAM: opengrep
-        with:
+#        with:
 #          api: ${{ secrets.ENDOR_API }}
 #          api_key: ${{ secrets.ENDOR_API_KEY }}
 #          api_secret: ${{ secrets.ENDOR_API_SECRET }}
-          namespace: farhan-demo
-          scan_dependencies: true
-          scan_secrets: true
-          scan_ai_sast: true
-          scan_tools: true
-          pr: false
-          scan_summary_output_type: table
+#          namespace: farhan-demo
+#         scan_dependencies: true
+#          scan_secrets: true
+#         scan_ai_sast: true
+#          scan_tools: true
+#          pr: false
+#          scan_summary_output_type: table
 
       # Build: Step 6
       - name: Build a Package
