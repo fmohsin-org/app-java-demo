@@ -1,26 +1,8 @@
-FROM maven:3.8.4-openjdk-17-slim AS build
+FROM eclipse-temurin:17-jre
 
 WORKDIR /app
 
-# Copy the Maven project files into the container
-COPY . .
+COPY target/endor-java-webapp-demo.jar /app/endor-java-webapp-demo.jar
+COPY target/dependency /app/dependency
 
-# Build the Maven project
-RUN mvn clean install
-RUN mvn dependency:copy-dependencies
-
-# Use a smaller image for deployment
-FROM openjdk:17-slim
-
-# Set the working directory inside the container
-WORKDIR /app
-
-# Copy the built artifact from the build stage
-COPY --from=build /app/target/endor-java-webapp-demo.jar .
-COPY --from=build /app/target/dependency dependency/
-
-# Expose any necessary ports
-EXPOSE 443
-
-# Set the command to run your application
-CMD ["java", "-jar", "endor-java-webapp-demo.jar"]
+ENTRYPOINT ["java", "-jar", "endor-java-webapp-demo.jar"]
