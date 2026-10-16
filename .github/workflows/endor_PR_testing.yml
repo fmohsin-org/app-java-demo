@@ -1,0 +1,47 @@
+name: Endor Labs PR Scan
+
+on:
+  pull_request:
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: microsoft
+          java-version: "17"
+
+      - name: Install dependencies
+        run: mvn clean install
+
+      - name: Endor Labs PR scan
+        if: github.event_name == 'pull_request'
+        uses: endorlabs/github-action@f46ffb04c928a9c9c356f9627bd60b710ed0963e # v1.1.13
+        with:
+          namespace: farhan-demo
+          api: https://api.endorlabs.com
+          api_key: ${{ secrets.ENDOR_API_CREDENTIALS_KEY }}
+          api_secret: ${{ secrets.ENDOR_API_CREDENTIALS_SECRET }}
+          enable_github_action_token: false
+          scan_dependencies: true
+          scan_secrets: true
+          scan_ai_sast: true
+          pr: true
+          # Action input is pr_incremental. It maps to endorctl --pr-incremental.
+          pr_incremental: true
+          enable_pr_comments: true
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          # --quick-scan has no dedicated input. Pass it as an extra endorctl argument.
+          additional_args: --quick-scan
